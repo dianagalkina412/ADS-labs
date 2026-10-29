@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstdlib>
 #include <random> 
 #include <complex> 
 using namespace std;
@@ -29,7 +28,7 @@ public:
         }
     }
 
-    // Конструктор копии:
+    // Конструктор копирования:
     Polynom(const Polynom& other) : current_degree(other.current_degree) {
         a = new T[power + 1];
         for (int k = 0; k <= power; k++) {
@@ -75,7 +74,7 @@ public:
     }
 
     // Поиск старшего ненулевого коэффициента
-    int maxNonZeroIndex() const {
+    int max_non_zero_index() const {
         for (int i = power; i > 0; i--) {
             if (a[i] != T(0)) {
                 return i;
@@ -87,7 +86,7 @@ public:
 
     // Обновление фактической степени:
     void normalize() {
-        current_degree = maxNonZeroIndex();
+        current_degree = max_non_zero_index();
     }
 
     // Сжатие до фактической степени:
@@ -159,7 +158,7 @@ template<int m, int n, class T> Polynom<(m > n ? m : n), T> operator-(Polynom<m,
     return x + ((T)(-1)) * y;
 }
 
-// Обобщенный операторная функция, резервирующая память под более высокую степень с коэффициентом 0
+// Обобщенная операторная функция, резервирующая память под более высокую степень с коэффициентом 0
 template<int power, class T> Polynom<power + 1, T> expand(Polynom<power, T> pol) {
     Polynom<power + 1, T> res;
     for (int k = 0; k <= power; k++) {
@@ -170,10 +169,10 @@ template<int power, class T> Polynom<power + 1, T> expand(Polynom<power, T> pol)
     return res;
 }
 
-// Обобщенный операторная функция, уменьшающая степень многочлена на 1
+// Обобщенная операторная функция, уменьшающая степень многочлена на 1
 template<int power, class T> Polynom<power - 1, T> compress(Polynom<power, T> pol) {
     Polynom<power - 1, T> res;
-    for (int k = 0; k < power; k++) {
+    for (int k = 0; k <= power - 1; k++) {
         res[k] = pol[k];
     }
 
@@ -227,7 +226,7 @@ template<int power_1, int power_2, class T> void test_polynom(Polynom<power_1, T
     cout << "Многочлен P1 с нулевым старшим членом (размерность " << power_1 + 1 << "):\t";
     expand(P1).print();
     // Уменьшим степень первого многочлена до первоначальной:
-    cout << "Многочлен P1 без нулевого старшего членоа (размерность " << power_1 + 1 - 1 << "):\t";
+    cout << "Многочлен P1 без нулевого старшего члена (размерность " << power_1 + 1 - 1 << "):\t";
     compress(expand(P1)).print();
     cout << endl;
     cout << "===========================================" << endl;
